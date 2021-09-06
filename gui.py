@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Sep  4 14:48:39 2021
+Created on Mon Sep  6 17:26:08 2021
 
 @author: ISA
 """
@@ -8,6 +8,9 @@ Created on Sat Sep  4 14:48:39 2021
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+import tkinter as tk
+
+
 
 #three compartments, Susceptible S, infected I, recovered R
 #dS/dt, dI/dt, dR/dt
@@ -16,8 +19,6 @@ import matplotlib.pyplot as plt
 #recovered sees recovery rate coming in, deaths leaving
 #beta is tranmission coefficient, FOI is beta * (I/N) where N is total pop
 #initially consider a model not accounting for births and deaths
-
-
 
 
 # Total population, N.
@@ -61,3 +62,58 @@ legend.get_frame().set_alpha(0.5)
 for spine in ('top', 'right', 'bottom', 'left'):
     ax.spines[spine].set_visible(False)
 plt.show()
+###############################################################################
+
+
+def solveode():
+    
+    def deriv(y, t, N, beta, gamma):
+        S, I, R = y
+        dS = ((-beta * S * I) / N)
+        dI = ((beta * S * I) / N) - (gamma * I)
+        dR = (gamma * I)
+        return dS, dI, dR
+    
+    solve = odeint(deriv, (S0, I0, R0), t, args=(N, beta, gamma))
+    S, I, R = solve.T
+    return
+
+solveode()
+
+
+
+
+
+
+
+def mainwindow():
+    mainwindow = tk.Tk()
+    mainwindow.geometry('350x350')
+    
+    tk.Label(mainwindow, text="enter parameters below").grid(row=1)
+    
+    tk.Label(mainwindow, text="N").grid(row=2)
+    tk.Label(mainwindow, text="i0").grid(row=3)
+    tk.Label(mainwindow, text="r0").grid(row=4)
+    tk.Label(mainwindow, text="beta").grid(row=5)
+    tk.Label(mainwindow, text="gamma").grid(row=6)
+    
+    e1 = tk.Entry(mainwindow)
+    e2 = tk.Entry(mainwindow)
+    e3 = tk.Entry(mainwindow)
+    e4 = tk.Entry(mainwindow)
+    e5 = tk.Entry(mainwindow)
+    
+    e1.grid(row=2, column=1)
+    e2.grid(row=3, column=1)
+    e3.grid(row=4, column=1)
+    e4.grid(row=5, column=1)
+    e5.grid(row=6, column=1)
+    
+    solve = tk.Button(mainwindow, text='solve!', command=lambda: [solveode()]).grid(row=7, column=1, sticky=tk.W, pady=4)
+
+    
+    mainwindow.mainloop()
+    
+    
+mainwindow()
