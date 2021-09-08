@@ -77,6 +77,10 @@ def mainwindow():
         # Everyone else, S0, is susceptible to infection initially.
         S0 = readN - readi0 - readr0
         # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
+        #if we sat R naught is the per capita rate of infecting others
+        #multiplied by the mean infectious period, then the formula will be
+        # Rnaught = beta / gamma
+        #assume Rnaught = 2, and gamma is 1/7 (in days), then beta = 2/7
         beta, gamma = readbeta, readgamma
         # A grid of time points (in days)
         t = np.linspace(0, 160, 160)
