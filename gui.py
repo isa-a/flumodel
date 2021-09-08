@@ -9,11 +9,11 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 import tkinter as tk
-from tkinter import IntVar,StringVar,DoubleVar
+from tkinter import IntVar, DoubleVar
+from PIL import ImageTk, Image
+
 
 ###############################################################################
-
-
 def mainwindow():
     mainwindow = tk.Tk()
     mainwindow.geometry('350x350')
@@ -48,11 +48,19 @@ def mainwindow():
     
     def values():
         
+        
+        global readN
+        global readi0
+        global readr0
+        global readbeta
+        global readgamma
+        
         readN = getN.get()
         readi0 = geti0.get()
         readr0 = getr0.get()
         readbeta = (getbeta.get())
         readgamma =(getgamma.get())
+        
         
         #print('ppppppppppppp', readbeta,readgamma)
         
@@ -93,7 +101,7 @@ def mainwindow():
         ax.plot(t, S/1000, 'blue', alpha=1, lw=2, label='Susceptible')
         ax.plot(t, I/1000, 'r', alpha=1, lw=2, label='Infected')
         ax.plot(t, R/1000, 'black', alpha=1, lw=2, label='Recovered with immunity')
-        ax.set_xlabel('Time /days')
+        ax.set_xlabel('Time in days')
         ax.set_ylabel('Number (1000s)')
         #ax.set_ylim(0,1.2)
         ax.yaxis.set_tick_params(length=0)
@@ -103,10 +111,36 @@ def mainwindow():
         legend.get_frame().set_alpha(0.5)
         for spine in ('top', 'right', 'bottom', 'left'):
             ax.spines[spine].set_visible(False)
-        plt.show()
-
+        plt.title('Influenza dynamics')
+        plt.savefig('N=' + str(readN) + ', i0=' + str(readi0) + 
+                    ', r0=' + str(readr0) + ', beta=' + str(readbeta) + ', gamma=' + str(readgamma) + '.png')
+        #plt.show()
+        
+        def plotwindow():
+            #This creates the main window of an application
+            window = tk.Toplevel()
+            window.title("Join")
+            window.geometry("500x400")
+            window.configure(background='grey')
+            path = ('N=' + str(readN) + ', i0=' + str(readi0) + 
+                                ', r0=' + str(readr0) + ', beta=' + str(readbeta) + ', gamma=' + str(readgamma) + '.png')
+            
+            #Creates a Tkinter-compatible photo image, which can be used everywhere Tkinter expects an image object.
+            img = ImageTk.PhotoImage(Image.open(path))
+            
+            #The Label widget is a standard Tkinter widget used to display a text or image on the screen.
+            panel = tk.Label(window, image = img)
+            
+            #The Pack geometry manager packs widgets in rows or columns.
+            panel.pack(side = "bottom", fill = "both", expand = "yes")
+            
+            #Start the GUI
+            window.mainloop()
+        plotwindow()
 
 
     mainwindow.mainloop()
     
 mainwindow()
+
+
