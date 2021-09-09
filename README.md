@@ -1,1 +1,1 @@
-"# flumodel" 
+Influenza model
