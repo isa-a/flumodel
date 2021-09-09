@@ -17,8 +17,9 @@ from PIL import ImageTk, Image
 def mainwindow():
     mainwindow = tk.Tk()
     mainwindow.geometry('350x350')
+    mainwindow.title('Influenza model')
     
-    tk.Label(mainwindow, text="enter parameters below").grid(row=1)
+    tk.Label(mainwindow, text="Enter parameters below").grid(row=1, padx=20)
     
     getN = IntVar()
     geti0 = IntVar()
@@ -30,11 +31,12 @@ def mainwindow():
     getgamma = DoubleVar()
 
     
-    tk.Label(mainwindow, text="N").grid(row=2)
-    tk.Label(mainwindow, text="i0").grid(row=3)
-    tk.Label(mainwindow, text="r0").grid(row=4)
-    tk.Label(mainwindow, text="beta").grid(row=5)
-    tk.Label(mainwindow, text="gamma").grid(row=6)
+    tk.Label(mainwindow, text="Size of population").grid(row=2)
+    tk.Label(mainwindow, text="Initial number of infected individuals   ").grid(row=3)
+    tk.Label(mainwindow, text="Initial number of recovered individuals   ").grid(row=4)
+    tk.Label(mainwindow, text="Contact rate β").grid(row=5)
+    tk.Label(mainwindow, text="Recovery rate γ (in 1/days)").grid(row=6)
+
     
     e1 = tk.Entry(mainwindow,textvariable = getN).grid(row=2, column=1)
     e2 = tk.Entry(mainwindow,textvariable = geti0).grid(row=3, column=1)
@@ -42,7 +44,13 @@ def mainwindow():
     e4 = tk.Entry(mainwindow,textvariable = getbeta).grid(row=5, column=1)
     e5 = tk.Entry(mainwindow,textvariable = getgamma).grid(row=6, column=1)
     
-    solve = tk.Button(mainwindow, text='solve!', command=lambda: [values()]).grid(row=7, column=1, sticky=tk.W, pady=4)
+    imgpath = ('sir2.png')
+    img = ImageTk.PhotoImage(Image.open(imgpath))
+    panel = tk.Label(mainwindow, image = img)
+    #panel.grid(row=25, column=0)
+    panel.place(x=22,y=200)
+    
+    solve = tk.Button(mainwindow, text='Solve!', command=lambda: [values()]).grid(row=7, column=1, sticky=tk.W, pady=4)
     
     
     
@@ -61,7 +69,7 @@ def mainwindow():
         readgamma =(getgamma.get())
         
         
-        #print('ppppppppppppp', readbeta,readgamma)
+        #print('', readbeta,readgamma)
         
         intN = int(readN)
         inti0 = int(readi0)
@@ -136,6 +144,7 @@ def mainwindow():
             
             #The Pack geometry manager packs widgets in rows or columns.
             panel.pack(side = "bottom", fill = "both", expand = "yes")
+            
             
             #Start the GUI
             window.mainloop()
