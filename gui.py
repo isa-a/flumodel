@@ -90,6 +90,7 @@ def mainwindow():
         I0, R0 = readi0, readr0
         # Everyone else, S0, is susceptible to infection initially.
         S0 = readN - readi0 - readr0
+        J0 = I0
         # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
         #if we sat R naught is the per capita rate of infecting others
         #multiplied by the mean infectious period, then the formula will be
@@ -101,17 +102,19 @@ def mainwindow():
         t = np.linspace(0, plotdate, plotdate)
 
         # The SIR model differential equations.
+        #10/9/21 ADDED NEW EQN FOR INCIDENCE
         def deriv(y, t, N, I0, R0):
-            S, I, R = y
+            S, I, R, J = y
             dS = ((-beta * S * I) / N)
             dI = ((beta * S * I) / N) - (gamma * I)
             dR = (gamma * I)
-            return dS, dI, dR
+            dJ = ((beta * S * I) / N)
+            return dS, dI, dR, dJ
         
         # Initial conditions are S0, I0, R0
         # Integrate the SIR equations over the time grid, t.
-        solve = odeint(deriv, (S0, I0, R0), t, args=(N, beta, gamma))
-        S, I, R = solve.T
+        solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
+        S, I, R, J = solve.T
         
         # Plot the data on three separate curves for S(t), I(t) and R(t)
         fig = plt.figure(facecolor='w')
@@ -119,6 +122,7 @@ def mainwindow():
         ax.plot(t, S/1000, 'blue', alpha=1, lw=2, label='Susceptible')
         ax.plot(t, I/1000, 'r', alpha=1, lw=2, label='Infected')
         ax.plot(t, R/1000, 'black', alpha=1, lw=2, label='Recovered')
+        ax.plot(t, J/1000, 'green', alpha=1, lw=2, label='Incidence')
         ax.set_xlabel('Time in days')
         ax.set_ylabel('Fraction of population')
         #ax.set_ylim(0,1.2)
@@ -133,7 +137,7 @@ def mainwindow():
         plt.savefig('N=' + str(readN) + ', i0=' + str(readi0) + 
                     ', r0=' + str(readr0) + ', beta=' + str(readbeta) + ', gamma=' + str(readgamma) + '.png')
         #plt.show()
-        
+
         def plotwindow():
             #This creates the main window of an application
             window = tk.Toplevel()
