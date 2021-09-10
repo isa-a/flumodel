@@ -9,7 +9,7 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 import tkinter as tk
-from tkinter import IntVar, DoubleVar
+from tkinter import IntVar, DoubleVar, StringVar
 from PIL import ImageTk, Image
 
 
@@ -29,13 +29,15 @@ def mainwindow():
     
     getbeta = DoubleVar()
     getgamma = DoubleVar()
-
+    
+    getdate = IntVar()
     
     tk.Label(mainwindow, text="Size of population").grid(row=2)
     tk.Label(mainwindow, text="Initial number of infected individuals   ").grid(row=3)
     tk.Label(mainwindow, text="Initial number of recovered individuals   ").grid(row=4)
     tk.Label(mainwindow, text="Contact rate β").grid(row=5)
     tk.Label(mainwindow, text="Recovery rate γ (in 1/days)").grid(row=6)
+    tk.Label(mainwindow, text="Time range (days)").grid(row=7)
 
     
     e1 = tk.Entry(mainwindow,textvariable = getN).grid(row=2, column=1)
@@ -43,14 +45,15 @@ def mainwindow():
     e3 = tk.Entry(mainwindow,textvariable = getr0).grid(row=4, column=1)
     e4 = tk.Entry(mainwindow,textvariable = getbeta).grid(row=5, column=1)
     e5 = tk.Entry(mainwindow,textvariable = getgamma).grid(row=6, column=1)
-    
+    e6 = tk.Entry(mainwindow,textvariable = getdate).grid(row=7, column=1)
+
     imgpath = ('sir2.png')
     img = ImageTk.PhotoImage(Image.open(imgpath))
     panel = tk.Label(mainwindow, image = img)
     #panel.grid(row=25, column=0)
     panel.place(x=22,y=200)
     
-    solve = tk.Button(mainwindow, text='Solve!', command=lambda: [values()]).grid(row=7, column=1, sticky=tk.W, pady=4)
+    solve = tk.Button(mainwindow, text='Solve!', command=lambda: [values()]).grid(row=8, column=1, sticky=tk.W, pady=4)
     
     
     
@@ -61,12 +64,14 @@ def mainwindow():
         global readr0
         global readbeta
         global readgamma
+        global readdate
         
         readN = getN.get()
         readi0 = geti0.get()
         readr0 = getr0.get()
         readbeta = (getbeta.get())
         readgamma =(getgamma.get())
+        readdate = (getdate.get())
         
         
         #print('', readbeta,readgamma)
@@ -76,6 +81,7 @@ def mainwindow():
         intr0 = int(readr0)
         intbeta = float(readbeta)       #ENTER AS DECIMAL
         intgamma = float(readgamma)     #ENTER AS DECIMAL
+        intdate = int(readdate)
         
         
         # Total population, N.
@@ -90,8 +96,9 @@ def mainwindow():
         # Rnaught = beta / gamma
         #assume Rnaught = 2, and gamma is 1/7 (in days), then beta = 2/7
         beta, gamma = readbeta, readgamma
+        plotdate = readdate
         # A grid of time points (in days)
-        t = np.linspace(0, 160, 160)
+        t = np.linspace(0, plotdate, plotdate)
 
         # The SIR model differential equations.
         def deriv(y, t, N, I0, R0):
@@ -113,7 +120,7 @@ def mainwindow():
         ax.plot(t, I/1000, 'r', alpha=1, lw=2, label='Infected')
         ax.plot(t, R/1000, 'black', alpha=1, lw=2, label='Recovered')
         ax.set_xlabel('Time in days')
-        ax.set_ylabel('Number (1000s)')
+        ax.set_ylabel('Fraction of population')
         #ax.set_ylim(0,1.2)
         ax.yaxis.set_tick_params(length=0)
         ax.xaxis.set_tick_params(length=0)
@@ -154,5 +161,4 @@ def mainwindow():
     mainwindow.mainloop()
     
 mainwindow()
-
 
