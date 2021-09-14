@@ -26,27 +26,18 @@ J0 = I0
 # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
 beta, gamma = 2/7, 1/7
 # A grid of time points (in days)
-t = np.linspace(0, 160, 160)
+t = np.linspace(0, 100,100)
 
-def randint():
-    betalist = []
-    for i in range(100):
-        rand1 = random.uniform(1.5, 2.5)
-        beta = rand1 * gamma
-    for bet in beta:
-        betalist.append(beta)
-        print(betalist)
-randint()
+  
+empty = []
+for i in range(100):
+    empty.append(random.uniform(1.5, 2.5)*gamma)
+
 
 def deriv2(y, t, N, beta, gamma):
-    S,I,R,J = y
-    for i in range(100):
-        S, I, R, J = y
-        dS = ((-randint * S * I) / N)
-        dI = ((randint * S * I) / N) - (gamma * I)
-        dR = (gamma * I)
-        dJ = ((randint * S * I) / N)
-    return dS,dI,dR,dJ
+    J = y
+    dJ = ((empty * S * I) / N)
+    return dJ
 
 solve2 = odeint(deriv2, (S0, R0, I0,J0), t, args=(N, beta, gamma))
 S,I,R,J = solve2.T
@@ -66,13 +57,18 @@ def deriv(y, t, N, beta, gamma):
 solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
 S, I, R, J = solve.T
 
+dJdt = []
+dJdt.append(((empty * S * I) / N))
+dJdt=[*zip(*dJdt)]
+
 # Plot the data on three separate curves for S(t), I(t) and R(t)
 fig = plt.figure(facecolor='w')
 ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
 #ax.plot(t, S, 'b', alpha=1, lw=2, label='Susceptible')
 #ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
 #ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
-ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
+#ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
+ax.plot(t, dJdt, 'green', alpha=1, lw=2, label='Incidence')
 ax.set_xlabel('Time in days')
 ax.set_ylabel('Number (1000s)')
 #ax.set_ylim(0,1.1)
@@ -84,4 +80,5 @@ legend.get_frame().set_alpha(0.5)
 #for spine in ('top', 'right', 'bottom', 'left'):
 #    ax.spines[spine].set_visible(False)
 plt.show()
-
+len(dJdt)
+np.transpose(dJdt)
