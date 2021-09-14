@@ -28,6 +28,30 @@ beta, gamma = 2/7, 1/7
 # A grid of time points (in days)
 t = np.linspace(0, 160, 160)
 
+def randint():
+    betalist = []
+    for i in range(100):
+        rand1 = random.uniform(1.5, 2.5)
+        beta = rand1 * gamma
+    for bet in beta:
+        betalist.append(beta)
+        print(betalist)
+randint()
+
+def deriv2(y, t, N, beta, gamma):
+    S,I,R,J = y
+    for i in range(100):
+        S, I, R, J = y
+        dS = ((-randint * S * I) / N)
+        dI = ((randint * S * I) / N) - (gamma * I)
+        dR = (gamma * I)
+        dJ = ((randint * S * I) / N)
+    return dS,dI,dR,dJ
+
+solve2 = odeint(deriv2, (S0, R0, I0,J0), t, args=(N, beta, gamma))
+S,I,R,J = solve2.T
+
+
 # The SIR model differential equations.
 def deriv(y, t, N, beta, gamma):
     S, I, R, J = y
@@ -41,12 +65,6 @@ def deriv(y, t, N, beta, gamma):
 # Integrate the SIR equations over the time grid, t.
 solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
 S, I, R, J = solve.T
-
-def randint():
-    for i in range(100):
-        rand1 = random.uniform(1.5, 2.5)
-        print(rand1)
-randint()
 
 # Plot the data on three separate curves for S(t), I(t) and R(t)
 fig = plt.figure(facecolor='w')
@@ -66,3 +84,4 @@ legend.get_frame().set_alpha(0.5)
 #for spine in ('top', 'right', 'bottom', 'left'):
 #    ax.spines[spine].set_visible(False)
 plt.show()
+
