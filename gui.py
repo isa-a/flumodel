@@ -8,6 +8,7 @@ Created on Mon Sep  6 17:26:08 2021
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
 import tkinter as tk
 from tkinter import IntVar, DoubleVar, StringVar
 from PIL import ImageTk, Image

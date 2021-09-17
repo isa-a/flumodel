@@ -34,15 +34,6 @@ for i in range(100):
     empty.append(random.uniform(1.5, 2.5)*gamma)
 
 
-def deriv2(y, t, N, beta, gamma):
-    J = y
-    dJ = ((empty * S * I) / N)
-    return dJ
-
-solve2 = odeint(deriv2, (S0, R0, I0,J0), t, args=(N, beta, gamma))
-S,I,R,J = solve2.T
-
-
 # The SIR model differential equations.
 def deriv(y, t, N, beta, gamma):
     S, I, R, J = y
