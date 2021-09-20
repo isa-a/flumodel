@@ -48,8 +48,12 @@ def deriv(y, t, N, beta, gamma):
 solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
 S, I, R, J = solve.T
 
+# dJdt = []
+# dJdt.append(((empty * S * I) / N))
+# dJdt=[*zip(*dJdt)]
+
 dJdt = []
-dJdt.append(((empty * S * I) / N))
+dJdt.append(J)
 dJdt=[*zip(*dJdt)]
 
 # Plot the data on three separate curves for S(t), I(t) and R(t)
