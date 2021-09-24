@@ -43,37 +43,48 @@ def deriv(y, t, N, beta, gamma):
     dJ = ((beta * S * I) / N)
     return dS, dI, dR, dJ
 
-# Initial conditions are S0, I0, R0
-# Integrate the SIR equations over the time grid, t.
-solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
-S, I, R, J = solve.T
+solns =  []
+for empt in empty:
+    ces = odeint(deriv, (S0, I0, R0, J0), t, args=(N, empt, gamma))
+    solns.append(ces)
 
-# dJdt = []
-# dJdt.append(((empty * S * I) / N))
-# dJdt=[*zip(*dJdt)]
 
-dJdt = []
-dJdt.append(J)
-dJdt=[*zip(*dJdt)]
+J_diffs = []
+for sol in solns:
+    S, I, R, J = sol.T
+    J_diffs.append(np.diff(J))
 
-# Plot the data on three separate curves for S(t), I(t) and R(t)
+
+# plot all the solutions
 fig = plt.figure(facecolor='w')
 ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
-#ax.plot(t, S, 'b', alpha=1, lw=2, label='Susceptible')
-#ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
-#ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
-#ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
-ax.plot(t, dJdt, 'green', alpha=1, lw=2, label='Incidence')
 ax.set_xlabel('Time in days')
 ax.set_ylabel('Number (1000s)')
-#ax.set_ylim(0,1.1)
-#ax.yaxis.set_tick_params(length=0)
-#ax.xaxis.set_tick_params(length=0)
 ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-legend = ax.legend()
-legend.get_frame().set_alpha(0.5)
-#for spine in ('top', 'right', 'bottom', 'left'):
-#    ax.spines[spine].set_visible(False)
+
+for J_diff in J_diffs:
+    ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
+
+# plot without legend
 plt.show()
-len(dJdt)
-np.transpose(dJdt)
+
+# # Plot the data on three separate curves for S(t), I(t) and R(t)
+# fig = plt.figure(facecolor='w')
+# ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
+# #ax.plot(t, S, 'b', alpha=1, lw=2, label='Susceptible')
+# #ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
+# #ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
+# #ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
+# #ax.plot(t, solns, 'green', alpha=1, lw=2, label='Incidence')
+# ax.set_xlabel('Time in days')
+# ax.set_ylabel('Number (1000s)')
+# #ax.set_ylim(0,1.1)
+# #ax.yaxis.set_tick_params(length=0)
+# #ax.xaxis.set_tick_params(length=0)
+# ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+# legend = ax.legend()
+# legend.get_frame().set_alpha(0.5)
+# #for spine in ('top', 'right', 'bottom', 'left'):
+# #    ax.spines[spine].set_visible(False)
+# plt.show()
+
