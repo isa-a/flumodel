@@ -61,9 +61,16 @@ ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
 ax.set_xlabel('Time in days')
 ax.set_ylabel('Number (1000s)')
 ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-
+xcoords = [2.5, 97.5]
 for J_diff in J_diffs:
-    ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
+    ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2)
+
+# colors for the lines
+colors = ['r','k','b']
+
+for xc,c in zip(xcoords,colors):
+    plt.axvline(x=xc, label='x = {}'.format(xc), c=c)
+plt.legend()
 
 # plot without legend
 plt.show()
