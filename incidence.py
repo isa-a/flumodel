@@ -53,24 +53,25 @@ J_diffs = []
 for sol in solns:
     S, I, R, J = sol.T
     J_diffs.append(np.diff(J))
-
+    
 
 # plot all the solutions
 fig = plt.figure(facecolor='w')
 ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
 ax.set_xlabel('Time in days')
-ax.set_ylabel('Number (1000s)')
+ax.set_ylabel('Number')
 ax.grid(b=True, which='major', c='w', lw=2, ls='-')
 xcoords = [2.5, 97.5]
 for J_diff in J_diffs:
     ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2)
+    
+def plot_percentile(data, percentile):
+    percentiles = [np.percentile(val, percentile) for val in data]
+    ax.plot(t, percentiles, 'blue', alpha=1, lw=2)
 
-# colors for the lines
-colors = ['r','k','b']
-
-for xc,c in zip(xcoords,colors):
-    plt.axvline(x=xc, label='x = {}'.format(xc), c=c)
-plt.legend()
+plot_percentile(solns, 97.5)
+#plot_percentile(solns, 2.5)
+#plot_percentile(solns, 0.5)
 
 # plot without legend
 plt.show()
@@ -94,4 +95,23 @@ plt.show()
 # #for spine in ('top', 'right', 'bottom', 'left'):
 # #    ax.spines[spine].set_visible(False)
 # plt.show()
+
+for val in solns:
+    ax.plot(t[1:], np.percentile(val,25), 'blue', alpha=1, lw=2)
+
+for t in solns:
+    ax.plot(t[1:], np.percentile(val,25), 'blue', alpha=1, lw=2)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
