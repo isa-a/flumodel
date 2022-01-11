@@ -9,6 +9,7 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from  scipy.optimize import root
+import pandas as pd
 
 
 def peak_infections_pct(beta, n_days_total = 100):
@@ -50,5 +51,11 @@ plt.plot(betas, 0.1*np.ones(len(betas)))
 
 
 root(lambda b: peak_infections_pct(b)-0.1, x0 = 0.5).x
+
+
+data = pd.read_csv('data.csv')
+x = data['Week']
+y = data['incidence']
+plt.plot(x,y)
 
 
