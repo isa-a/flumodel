@@ -12,10 +12,10 @@ from  scipy.optimize import root
 import pandas as pd
 
 
-def peak_infections_pct(beta, n_days_total = 100):
+def peak_infections(beta, days = 100):
 
     # Total population, N.
-    N = 10000
+    N = 1000
     # Initial number of infected and recovered individuals, I0 and R0.
     I0, R0 = 10, 0
     # Everyone else, S0, is susceptible to infection initially.
@@ -24,7 +24,7 @@ def peak_infections_pct(beta, n_days_total = 100):
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
     gamma = 1/7
     # A grid of time points (in days)
-    t = np.linspace(0, n_days_total, n_days_total+1)
+    t = np.linspace(0, days, days + 1)
 
     # The SIR model differential equations.
     def deriv(y, t, N, beta, gamma):
@@ -44,13 +44,13 @@ def peak_infections_pct(beta, n_days_total = 100):
 
 
 betas = np.linspace(0,1,101,endpoint = True)
-peak_inf = [peak_infections_pct(b) for b in betas]
+peak_inf = [peak_infections(b) for b in betas]
 plt.plot(betas, peak_inf)
 plt.plot(betas, 0.1*np.ones(len(betas)))
 
 
 
-root(lambda b: peak_infections_pct(b)-0.1, x0 = 0.5).x
+root(lambda b: peak_infections(b)-0.1, x0 = 0.5).x
 
 
 data = pd.read_csv('data.csv')
