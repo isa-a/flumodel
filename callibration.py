@@ -15,7 +15,7 @@ import pandas as pd
 def peak_infections(beta, days = 100):
 
     # Total population, N.
-    N = 1000
+    N = 100000
     # Initial number of infected and recovered individuals, I0 and R0.
     I0, R0 = 10, 0
     # Everyone else, S0, is susceptible to infection initially.
@@ -50,7 +50,7 @@ plt.plot(betas, 0.1*np.ones(len(betas)))
 
 
 
-root(lambda b: peak_infections(b)-0.1, x0 = 0.5).x
+root(lambda b: peak_infections(b)-0.3049758655, x0 = 0.5).x
 
 
 data = pd.read_csv('data.csv')
