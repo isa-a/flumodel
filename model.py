@@ -69,15 +69,3 @@ legend.get_frame().set_alpha(0.5)
 #    ax.spines[spine].set_visible(False)
 plt.show()
 
-
-
-
-fig = plt.figure(facecolor='w')
-ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
-ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
-ax.set_xlabel('Time in days')
-ax.set_ylabel('Number')
-ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-legend = ax.legend()
-legend.get_frame().set_alpha(0.5)
-plt.show()
