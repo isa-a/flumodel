@@ -55,9 +55,9 @@ plt.plot(betas, 0.1*np.ones(len(betas)))
 root(lambda b: peak_infections(b)-0.1, x0 = 0.5).x
 
 
-data = pd.read_csv('data.csv')
+data = pd.read_csv('data2.csv')
 x = data['Week']
-y = data['incidence']
+y = data['prevalence']
 plt.plot(x,y)
 
 
@@ -124,11 +124,12 @@ print(res)
 
 d = {'Week': [1, 2,3,4,5,6,7,8,9,10,11], 'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 df = pd.DataFrame(data=d)
+df2 = pd.DataFrame(data=data)
 
-def peak_infections(beta, df):
+def peak_infections(beta, df2):
 
     # Weeks for which the ODE system will be solved
-    weeks = df.Week.to_numpy()
+    weeks = df2.Week.to_numpy()
 
     # Total population, N.
     N = 100000
@@ -158,13 +159,13 @@ def peak_infections(beta, df):
 
     return I/N
 
-def residual(x, df):
+def residual(x, df2):
 
     # Total population, N.
     N = 100000
-    incidence = df.incidence.to_numpy()/N
-    return np.sum((peak_infections(x, df)[1:] - incidence) ** 2)
+    prevalence = df2.prevalence.to_numpy()/N
+    return np.sum((peak_infections(x, df2)[1:] - prevalence) ** 2)
 
 x0 = 0.5
-res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04})
+res = minimize(residual, x0, args=(df2), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
