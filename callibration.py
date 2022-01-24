@@ -44,16 +44,7 @@ def peak_infections(beta, days = 100):
     return np.max(I)/N
 
 
-betas = np.linspace(0,1,101,endpoint = True)
-peak_inf = [peak_infections(b) for b in betas]
-plt.plot(betas, peak_inf)
-plt.plot(betas, 0.1*np.ones(len(betas)))
-
 #scipy.optimize
-
-
-root(lambda b: peak_infections(b)-0.1, x0 = 0.5).x
-
 
 data = pd.read_csv('data2.csv')
 x = data['Week']
@@ -68,68 +59,18 @@ def residual(x):
 
 res = minimize(residual, 0.5, method="Nelder-Mead")
 print(res)
+
 ###############################################################################
-
-import numpy as np
-from scipy.integrate import odeint
-import matplotlib.pyplot as plt
-from  scipy.optimize import root
-import pandas as pd
-
-def peak_infections(beta, days = 100):
-
- # Total population, N.
- N = 1000
- # Initial number of infected and recovered individuals, I0 and R0.
- I0, R0 = 10, 0
- # Everyone else, S0, is susceptible to infection initially.
- S0 = N - I0 - R0
- J0 = I0
- # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
- gamma = 1/7
- # A grid of time points (in days)
- t = np.linspace(0, days, days + 1)
-
- # The SIR model differential equations.
- def deriv(y, t, N, beta, gamma):
-   S, I, R, J = y
-   dS = ((-beta * S * I) / N)
-   dI = ((beta * S * I) / N) - (gamma * I)
-   dR = (gamma * I)
-   dJ = ((beta * S * I) / N)
-   return dS, dI, dR, dJ
-
-# Initial conditions are S0, I0, R0
-# Integrate the SIR equations over the time grid, t.
- solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
- S, I, R, J = solve.T
-
- return np.max(I)/N
-
-root(lambda b: peak_infections(b)-0.1, x0 = 0.5).x
-
-
-from scipy.optimize import minimize
-
-def residual(x):
-    return (peak_infections(x) - 0.1) ** 2
-
-x0 = 0.5
-res = minimize(residual, x0, method="Nelder-Mead", options={'fatol':1e-04})
-print(res)
-
-
-
+##########                  WITH WEEKLY DATA
 ###############################################################################
 
 d = {'Week': [1, 2,3,4,5,6,7,8,9,10,11], 'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 df = pd.DataFrame(data=d)
-df2 = pd.DataFrame(data=data)
 
-def peak_infections(beta, df2):
+def peak_infections(beta, df):
 
     # Weeks for which the ODE system will be solved
-    weeks = df2.Week.to_numpy()
+    weeks = df.Week.to_numpy()
 
     # Total population, N.
     N = 100000
@@ -140,7 +81,7 @@ def peak_infections(beta, df2):
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
     gamma = 1/7 * 7 #rate should be in weeks now
-    # A grid of time points (in days)
+    # A grid of time points 
     t = np.linspace(0, weeks[-1], weeks[-1] + 1)
 
     # The SIR model differential equations.
@@ -159,13 +100,13 @@ def peak_infections(beta, df2):
 
     return I/N
 
-def residual(x, df2):
+def residual(x, df):
 
     # Total population, N.
     N = 100000
-    prevalence = df2.prevalence.to_numpy()/N
-    return np.sum((peak_infections(x, df2)[1:] - prevalence) ** 2)
+    incidence = df.incidence.to_numpy()/N
+    return np.sum((peak_infections(x, df)[1:] - incidence) ** 2)
 
 x0 = 0.5
-res = minimize(residual, x0, args=(df2), method="Nelder-Mead", options={'fatol':1e-04}).x
+res = minimize(residual, x0, args=(df), method="Nelder-Mead").x
 print(res)
