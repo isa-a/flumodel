@@ -30,7 +30,7 @@ J0 = I0
 # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
 beta, gamma = 1.47617188, 1/7
 # A grid of time points (in days)
-t = np.linspace(0, 100, 100+1)
+t = np.linspace(0, 77, 77+1)
 
 # The SIR model differential equations.
 def deriv(y, t, N, beta, gamma):
@@ -46,8 +46,8 @@ def deriv(y, t, N, beta, gamma):
 solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
 S, I, R, J = solve.T
 
-#J_diff = J[1:] - J[:-1]
-#J_diff = np.diff(J)
+J_diff = J[1:] - J[:-1]
+J_diff = np.diff(J)
 # Plot the data on three separate curves for S(t), I(t) and R(t)
 fig = plt.figure(facecolor='w')
 ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
@@ -79,9 +79,9 @@ ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
 #ax.plot(t, S, 'b', alpha=1, lw=2, label='Susceptible')
 #ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
 #ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
-ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
+#ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
 #ax.plot(t, J, 'red', alpha=1, lw=2, label='Cumulative incidence')
-#ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
+ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
 ax.set_xlabel('Time in days')
 ax.set_ylabel('Number')
 #ax.set_ylim(0,1.1)
