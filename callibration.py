@@ -23,6 +23,7 @@ def peak_infections(beta, days = 100):
     S0 = N - I0 - R0
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
+    #reproductive no. R zero is beta/gamma
     gamma = 1/7
     # A grid of time points (in days)
     t = np.linspace(0, days, days + 1)
@@ -46,9 +47,9 @@ def peak_infections(beta, days = 100):
 
 #scipy.optimize
 
-data = pd.read_csv('data2.csv')
+data = pd.read_csv('data.csv')
 x = data['Week']
-y = data['prevalence']
+y = data['incidence']
 plt.plot(x,y)
 
 
@@ -80,6 +81,7 @@ def peak_infections(beta, df):
     S0 = N - I0 - R0
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
+    #reproductive no. R zero is beta/gamma
     gamma = 1/7 * 7 #rate should be in weeks now
     # A grid of time points 
     t = np.linspace(0, weeks[-1], weeks[-1] + 1)
