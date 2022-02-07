@@ -8,9 +8,9 @@ Created on Tue Jan 11 17:45:56 2022
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-from  scipy.optimize import root
 from scipy.optimize import minimize
 import pandas as pd
+from scipy.optimize import leastsq
 
 
 def peak_infections(beta, days = 100):
@@ -65,7 +65,11 @@ print(res)
 ##########                  WITH WEEKLY DATA
 ###############################################################################
 
-d = {'Week': [1, 2,3,4,5,6,7,8,9,10,11], 'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
+
+t = np.arange(0,84,7)
+d = {'Week': t, 'incidence': [0,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
+#d = {'Week': [time[7],time[14],time[21],time[28],time[35],time[42],time[49],time[56],time[63],time[70],time[77]], 'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
+#d = {'Week': [1, 2,3,4,5,6,7,8,9,10,11], 'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 df = pd.DataFrame(data=d)
 
 def peak_infections(beta, df):
@@ -82,9 +86,9 @@ def peak_infections(beta, df):
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
     #reproductive no. R zero is beta/gamma
-    gamma = 1/7 * 7 #rate should be in weeks now
+    gamma = 1/6 * 6 #rate should be in weeks now
     # A grid of time points 
-    t = np.linspace(0, weeks[-1], weeks[-1] + 1)
+    t = np.arange(0,84,7)
 
     # The SIR model differential equations.
     def deriv(y, t, N, beta, gamma):
@@ -107,8 +111,11 @@ def residual(x, df):
     # Total population, N.
     N = 100000
     incidence = df.incidence.to_numpy()/N
-    return np.sum((peak_infections(x, df)[1:] - incidence) ** 2)
+    return np.sum((peak_infections(x, df) - incidence) ** 2)
 
 x0 = 0.5
 res = minimize(residual, x0, args=(df), method="Nelder-Mead").x
 print(res)
+
+best = leastsq(residual, x0,args=(df))
+print(best)

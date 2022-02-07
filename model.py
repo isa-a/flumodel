@@ -30,10 +30,10 @@ S0 = N - I0 - R0
 J0 = I0
 # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
 #reproductive no. R zero is beta/gamma
-beta, gamma = 1.47617188, 1/7
+beta, gamma = 0.5, 1/6
 # A grid of time points (in days)
 t = np.linspace(0, 77, 77+1)
-t1 = [1,2,3,4,5,6,7,8,9,10,11]
+t1 = [0,1,2,3,4,5,6,7,8,9,10,11]
 t1 =  [element * 7 for element in t1]
 
 # The SIR model differential equations.
@@ -49,6 +49,38 @@ def deriv(y, t, N, beta, gamma):
 # Integrate the SIR equations over the time grid, t.
 solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
 S, I, R, J = solve.T
+
+d = {'Week': [0,1, 2,3,4,5,6,7,8,9,10,11], 'incidence': [0, 206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
+df = pd.DataFrame(data=d)
+df.plot(x='Week', y='incidence')
+
+
+J_diff = J[1:] - J[:-1]
+J_diff = np.diff(J)
+#J_diff = J[1:] - J[:-1]
+#J_diff = np.diff(J)
+# Plot the data on three separate curves for S(t), I(t) and R(t)
+fig = plt.figure(facecolor='w')
+ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
+#ax.plot(t, S, 'b', alpha=1, lw=2, label='Susceptible')
+#ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
+#ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
+#ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
+#ax.plot(t, J, 'red', alpha=1, lw=2, label='Cumulative incidence')
+ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
+ax.plot(t1, df.incidence, 'r', alpha=1, lw=2, label='weekly data')
+ax.set_xlabel('Time in days')
+ax.set_ylabel('Number')
+#ax.set_ylim(0,1.1)
+#ax.yaxis.set_tick_params(length=0)
+#ax.xaxis.set_tick_params(length=0)
+ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+legend = ax.legend()
+legend.get_frame().set_alpha(0.5)
+#for spine in ('top', 'right', 'bottom', 'left'):
+#    ax.spines[spine].set_visible(False)
+plt.show()
+
 
 J_diff = J[1:] - J[:-1]
 J_diff = np.diff(J)
@@ -76,32 +108,3 @@ plt.show()
 
 
 
-d = {'Week': [1, 2,3,4,5,6,7,8,9,10,11], 'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
-df = pd.DataFrame(data=d)
-
-
-J_diff = J[1:] - J[:-1]
-J_diff = np.diff(J)
-#J_diff = J[1:] - J[:-1]
-#J_diff = np.diff(J)
-# Plot the data on three separate curves for S(t), I(t) and R(t)
-fig = plt.figure(facecolor='w')
-ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
-#ax.plot(t, S, 'b', alpha=1, lw=2, label='Susceptible')
-#ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
-#ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
-#ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
-#ax.plot(t, J, 'red', alpha=1, lw=2, label='Cumulative incidence')
-ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
-ax.plot(t1, df, 'r', alpha=1, lw=2, label='weekly data')
-ax.set_xlabel('Time in days')
-ax.set_ylabel('Number')
-#ax.set_ylim(0,1.1)
-#ax.yaxis.set_tick_params(length=0)
-#ax.xaxis.set_tick_params(length=0)
-ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-legend = ax.legend()
-legend.get_frame().set_alpha(0.5)
-#for spine in ('top', 'right', 'bottom', 'left'):
-#    ax.spines[spine].set_visible(False)
-plt.show()
