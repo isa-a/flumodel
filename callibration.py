@@ -66,9 +66,12 @@ print(res)
 ###############################################################################
 
 
-t = np.arange(0,84,7)
-d = {'Week': t, 'incidence': [0,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
+#t = np.arange(0,84,7)
+t = np.linspace(0, 77, 77+1)
+d = {'Week': [t[0], t[7],t[14],t[21],t[28],t[35],t[42],t[49],t[56],t[63],t[70],t[77]], 'incidence': [0,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 df = pd.DataFrame(data=d)
+#d = {'Week': t, 'incidence': [0,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
+#df = pd.DataFrame(data=d)
 
 def peak_infections(beta, df):
 
@@ -84,12 +87,12 @@ def peak_infections(beta, df):
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
     #reproductive no. R zero is beta/gamma
-    gamma = 1/6 * 6 #rate should be in weeks now
+    gamma = 1/6 #rate should be in weeks now
     # A grid of time points 
-    t = np.arange(0,84,7)
+    t7 = np.arange(0,84,7)
 
     # The SIR model differential equations.
-    def deriv(y, t, N, beta, gamma):
+    def deriv(y, t7, N, beta, gamma):
         S, I, R, J = y
         dS = ((-beta * S * I) / N)
         dI = ((beta * S * I) / N) - (gamma * I)
@@ -99,7 +102,7 @@ def peak_infections(beta, df):
 
     # Initial conditions are S0, I0, R0
     # Integrate the SIR equations over the time grid, t.
-    solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
+    solve = odeint(deriv, (S0, I0, R0, J0), t7, args=(N, beta, gamma))
     S, I, R, J = solve.T
 
     return I/N

@@ -30,14 +30,16 @@ S0 = N - I0 - R0
 J0 = I0
 # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
 #reproductive no. R zero is beta/gamma
-beta, gamma = 0.5, 1/6
+beta, gamma = 0.4205, 1/6
 # A grid of time points (in days)
 t = np.linspace(0, 77, 77+1)
-t1 = [0,1,2,3,4,5,6,7,8,9,10,11]
+t7 = np.arange(0, 84, 7)
+t1 = [0,1,2,3,4,5,6,7,8,9,10,11,12]
 t1 =  [element * 7 for element in t1]
+t1 = np.array(t1)
 
 # The SIR model differential equations.
-def deriv(y, t, N, beta, gamma):
+def deriv(y, t7, N, beta, gamma):
     S, I, R, J = y
     dS = ((-beta * S * I) / N)
     dI = ((beta * S * I) / N) - (gamma * I)
@@ -47,7 +49,7 @@ def deriv(y, t, N, beta, gamma):
 
 # Initial conditions are S0, I0, R0
 # Integrate the SIR equations over the time grid, t.
-solve = odeint(deriv, (S0, I0, R0, J0), t, args=(N, beta, gamma))
+solve = odeint(deriv, (S0, I0, R0, J0), t7, args=(N, beta, gamma))
 S, I, R, J = solve.T
 
 #d = {'Week': [0,1, 2,3,4,5,6,7,8,9,10,11], 'incidence': [0, 206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
@@ -56,7 +58,7 @@ df = pd.DataFrame(data=d)
 df.plot(x='Week', y='incidence')
 
 
-J_diff = J[1:] - J[:-1]
+J_diff = J[0:] - J[:1]
 J_diff = np.diff(J)
 #J_diff = J[1:] - J[:-1]
 #J_diff = np.diff(J)
@@ -68,8 +70,8 @@ ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
 #ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
 #ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
 #ax.plot(t, J, 'red', alpha=1, lw=2, label='Cumulative incidence')
-ax.plot(t[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
-ax.plot(t1, df.incidence, 'r', alpha=1, lw=2, label='weekly data')
+ax.plot(t7[1:], J_diff, 'blue', alpha=1, lw=2, label='Daily incidence')
+ax.plot(t1[1:], df.incidence, 'r', alpha=1, lw=2, label='weekly data')
 ax.set_xlabel('Time in days')
 ax.set_ylabel('Number')
 #ax.set_ylim(0,1.1)
