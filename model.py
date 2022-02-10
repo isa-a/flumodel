@@ -30,7 +30,7 @@ S0 = N - I0 - R0
 J0 = I0
 # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
 #reproductive no. R zero is beta/gamma
-beta, gamma = 0.42, 1/6
+beta, gamma = 0.42025, 1/6
 # A grid of time points (in days)
 t = np.linspace(0, 77, 77+1)
 t7 = np.arange(0, 84, 7)
