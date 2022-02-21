@@ -75,8 +75,9 @@ print(res)
 best = leastsq(residual, x0,args=(df))
 print(best)
 
-results = minimize_scalar(residual,(0.4, 0.5),args=(df)).x
+results = minimize_scalar(residual,(0.4, 0.5),args=(df))
 print(results)
+results['fun']
 
 
 ###############################################################################
