@@ -56,14 +56,14 @@ def peak_infections(beta, df):
     solve = odeint(deriv, (S0, I0, R0, J0), t7, args=(N, beta, gamma))
     S, I, R, J = solve.T
 
-    return np.max(I)/N
+    return I/N
 
 def residual(x, df):
 
     # Total population,  N.
     N = 100000
     incidence = df.incidence.to_numpy()/N
-    return np.sum((peak_infections(x, df) - incidence) ** 2)
+    return np.sum((peak_infections(x,df) - incidence) ** 2)
 
 x0 = 0.5
 res = minimize(residual, x0, args=(df), method="Nelder-Mead").x
@@ -124,6 +124,9 @@ def residual(x):
     return (peak_infections_days(x) - 0.1) ** 2
 
 
-res = minimize(residual, 0.5, method="Nelder-Mead")
+res = minimize(residual, 0.5, method="Nelder-Mead").x
 print(res)
+
+best = leastsq(residual, x0)
+print(best)
 
