@@ -50,7 +50,7 @@ def peak_infections(beta, df):
         dS = ((-beta * S * I) / N)
         dI = ((beta * S * I) / N) - (gamma * I)
         dR = (gamma * I)
-        dJ = ((beta * S * I) / N)
+        dJ = ((beta * S * I) / N) #incidence
         return dS, dI, dR, dJ
 
     # Initial conditions are S0, I0, R0
