@@ -40,10 +40,10 @@ def peak_infections(beta, df):
     #reproductive no. R zero is beta/gamma
     gamma = 1/6 #rate should be in weeks now
     # A grid of time points 
-    t7 = np.arange(7,84,7)
+    time = np.arange(7,84,7)
 
     # The SIR model differential equations.
-    def deriv(y, t7, N, beta, gamma):
+    def deriv(y, time, N, beta, gamma):
         S, I, R, J = y
         dS = ((-beta * S * I) / N)
         dI = ((beta * S * I) / N) - (gamma * I)
@@ -53,7 +53,7 @@ def peak_infections(beta, df):
 
     # Initial conditions are S0, I0, R0
     # Integrate the SIR equations over the time grid, t.
-    solve = odeint(deriv, (S0, I0, R0, J0), t7, args=(N, beta, gamma))
+    solve = odeint(deriv, (S0, I0, R0, J0), time, args=(N, beta, gamma))
     S, I, R, J = solve.T
 
     return I/N
