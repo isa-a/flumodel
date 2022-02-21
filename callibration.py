@@ -19,7 +19,9 @@ from scipy.optimize import leastsq
 
 #t = np.arange(0,84,7)
 t = np.linspace(0, 77, 77+1)
-d = {'Week': [t[7],t[14],t[21],t[28],t[35],t[42],t[49],t[56],t[63],t[70],t[77]], 'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
+d = {'Week': [t[7],t[14],t[21],t[28],t[35],t[42],t[49],t[56],t[63],t[70],t[77]], 
+     'incidence': [206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,
+                   7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 df = pd.DataFrame(data=d)
 #d = {'Week': t, 'incidence': [0,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 #df = pd.DataFrame(data=d)
@@ -66,7 +68,7 @@ def residual(x, df):
     return np.sum((peak_infections(x,df) - incidence) ** 2)
 
 x0 = 0.5
-res = minimize(residual, x0, args=(df), method="Nelder-Mead").x
+res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
 best = leastsq(residual, x0,args=(df))
