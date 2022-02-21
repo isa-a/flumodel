@@ -9,6 +9,7 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
+from scipy.optimize import minimize_scalar
 import pandas as pd
 from scipy.optimize import leastsq
 
@@ -45,7 +46,7 @@ def peak_infections(beta, df):
     times = np.arange(7,84,7)
 
     # The SIR model differential equations.
-    def deriv(y, time, N, beta, gamma):
+    def deriv(y, times, N, beta, gamma):
         S, I, R, J = y
         dS = ((-beta * S * I) / N)
         dI = ((beta * S * I) / N) - (gamma * I)
@@ -74,6 +75,8 @@ print(res)
 best = leastsq(residual, x0,args=(df))
 print(best)
 
+results = minimize_scalar(residual,args=(df)).x
+print(results)
 
 
 ###############################################################################
