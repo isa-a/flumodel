@@ -70,17 +70,19 @@ def residual(x, df):
     incidence = df.incidence.to_numpy()/N
     return np.sum((peak_infections(x,df) - incidence) ** 2)
 
-x0 = [0.5, 1/7]
+x0 = [0.5, 1/6]
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
-best = leastsq(residual, x0,args=(df))
-print(best)
-
-results = minimize_scalar(residual,(0.4, 0.5),args=(df))
-print(results)
-results['fun']
-
+# =============================================================================
+# res2 = leastsq(residual, x0,args=(df))
+# print(res2)
+# 
+# results = minimize_scalar(residual,(0.4, 0.5),args=(df))
+# print(results)
+# results['fun']
+# 
+# =============================================================================
 
 ###############################################################################
 ##########                  --------------------------
