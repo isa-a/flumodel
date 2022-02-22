@@ -27,7 +27,7 @@ df = pd.DataFrame(data=d)
 #d = {'Week': t, 'incidence': [0,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 #df = pd.DataFrame(data=d)
 
-def peak_infections(beta, df):
+def peak_infections(x, df):
  
     # Weeks for which the ODE system will be solved
     #weeks = df.Week.to_numpy()
@@ -41,7 +41,9 @@ def peak_infections(beta, df):
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
     #reproductive no. R zero is beta/gamma
-    gamma = 1/6 #rate should be in weeks now
+    beta = x[0]
+    gamma = x[1]    
+    #gamma = 1/6 #rate should be in weeks now
     # A grid of time points 
     times = np.arange(7,84,7)
 
@@ -68,7 +70,7 @@ def residual(x, df):
     incidence = df.incidence.to_numpy()/N
     return np.sum((peak_infections(x,df) - incidence) ** 2)
 
-x0 = 0.5
+x0 = [0.5, 1/7]
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
