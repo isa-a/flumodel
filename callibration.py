@@ -59,20 +59,19 @@ def peak_infections(beta, df):
     solve = odeint(deriv, (S0, I0, R0, J0), times, args=(N, beta, gamma))
     S, I, R, J = solve.T
 
-    return I/N
+    return np.diff(J)/N
 
 def residual(x, df):
 
     # Total population,  N.
-    N = 100000
-    incidence = df.incidence.to_numpy()/N
+    StartingPop = 100000
+    incidence = df.incidence.to_numpy()/StartingPop
     return np.sum((peak_infections(x,df) - incidence) ** 2)
 
 x0 = 0.5
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
-import matplotlib.pyplot as plt
 plt.plot(d['Week'], df.incidence.to_numpy()/100000, label="Real data")
 plt.plot(d['Week'], peak_infections(.72, df), label="Model with 0.72")
 #plt.plot(d['Week'], peak_infections(.42, df), label="Model with .42")
