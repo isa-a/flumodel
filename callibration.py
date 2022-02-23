@@ -72,10 +72,28 @@ x0 = 0.5
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
-plt.plot(d['Week'], df.incidence.to_numpy()/100000, label="Real data")
-plt.plot(d['Week'], peak_infections(.53, df), label="Model with 0.72")
-#plt.plot(d['Week'], peak_infections(.42, df), label="Model with .42")
-plt.legend()
+
+fig = plt.figure(facecolor='w')
+ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
+#ax.plot(t, S, 'b', alpha=1, lw=2, label='Susceptible')
+#ax.plot(t, I, 'r', alpha=1, lw=2, label='Infected')
+#ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
+#ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
+#ax.plot(t, J, 'red', alpha=1, lw=2, label='Cumulative incidence')
+ax.plot(d['Week'], df.incidence.to_numpy(), label="Real data")
+ax.plot(d['Week'], peak_infections(.53, df)*100000, label="Model with 0.53")
+ax.set_xlabel('Time in days')
+ax.set_ylabel('Number')
+#ax.set_ylim(0,1.1)
+#ax.yaxis.set_tick_params(length=0)
+#ax.xaxis.set_tick_params(length=0)
+ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+legend = ax.legend()
+legend.get_frame().set_alpha(0.5)
+#for spine in ('top', 'right', 'bottom', 'left'):
+#    ax.spines[spine].set_visible(False)
+plt.show()
+
 
 # =============================================================================
 # res2 = leastsq(residual, x0,args=(df))
