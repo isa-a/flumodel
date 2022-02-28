@@ -24,13 +24,13 @@ import pandas as pd
 # Total population, N.
 N = 100000
 # Initial number of infected and recovered individuals, I0 and R0.
-I0, R0 = 1.41351201, 0
+I0, R0 = 10, 0
 # Everyone else, S0, is susceptible to infection initially.
 S0 = N - I0 - R0
 J0 = I0
 # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
 #reproductive no. R zero is beta/gamma
-beta, gamma = 0.66411585, 0.21620529
+beta, gamma = 0.42, 1/6
 # A grid of time points (in days)
 t = np.linspace(0, 77, 77+1)
 t7 = np.arange(0, 84, 7)
