@@ -71,7 +71,7 @@ def residual(x, df):
     incidence = df.incidence.to_numpy()/StartingPop
     return np.sum((peak_infections(x,df) - incidence) ** 2)
 
-x0 = [0.5, 10] #i0, beta, gamma
+x0 = [0.5, 1] #i0, beta, gamma
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
