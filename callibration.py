@@ -77,6 +77,9 @@ x0 = [0.5, 10, 1/6] #beta, i0, gamma
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
+res2 = leastsq(residual, x0,args=(df))
+print(res2)
+
 initial_infecteds = np.arange(1,31,1)
        
 def fit(i):
@@ -85,7 +88,7 @@ def fit(i):
     print(res)
 
 for i in initial_infecteds:
-       fit(i)
+    fit(i)
         
 
 fig = plt.figure(facecolor='w')
