@@ -71,10 +71,21 @@ def residual(x, df):
     incidence = df.incidence.to_numpy()/StartingPop
     return np.sum((peak_infections(x,df) - incidence) ** 2)
 
+
 x0 = [0.5, 1] #i0, beta, gamma
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
+initial_infecteds = np.arange(1,31,1)
+       
+def fit(i):
+    x0 = [1, i] #i0, beta, gamma
+    res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
+    print(res)
+
+for i in initial_infecteds:
+       fit(i)
+        
 
 fig = plt.figure(facecolor='w')
 ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
