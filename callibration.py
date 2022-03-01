@@ -40,11 +40,12 @@ def peak_infections(x, df):
     R0 = 0
     beta = x[0]
     I0 = x[1]
+    gamma = x[2]
     S0 = N - I0 - R0
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
     #reproductive no. R zero is beta/gamma
-    gamma = 1/6 #rate should be in weeks now
+    #gamma = 1/6 #rate should be in weeks now
     # A grid of time points 
     times = np.arange(0,84,7)
 
@@ -72,14 +73,14 @@ def residual(x, df):
     return np.sum((peak_infections(x,df) - incidence) ** 2)
 
 
-x0 = [0.5, 1] #i0, beta, gamma
+x0 = [0.5, 10, 1/6] #beta, i0, gamma
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
 initial_infecteds = np.arange(1,31,1)
        
 def fit(i):
-    x0 = [1, i] #i0, beta, gamma
+    x0 = [0.5, i, 1/6] #i0, beta, gamma
     res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
     print(res)
 
