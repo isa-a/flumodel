@@ -36,13 +36,13 @@ def peak_infections(beta, df):
     # Total population, N.
     N = 100000
     # Initial number of infected and recovered individuals, I0 and R0.
-    I0, R0 = 10, 0
+    I0, R0 = 1.41, 0
     # Everyone else, S0, is susceptible to infection initially.
     S0 = N - I0 - R0
     J0 = I0
     # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
     #reproductive no. R zero is beta/gamma
-    gamma = 1/6 #rate should be in weeks now
+    gamma = 0.21 #rate should be in weeks now
     # A grid of time points 
     times = np.arange(7,84,7)
 
@@ -85,8 +85,8 @@ ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
 #ax.plot(t, R, 'black', alpha=1, lw=2, label='Recovered')
 #ax.plot(t, J, 'green', alpha=1, lw=2, label='Incidence')
 #ax.plot(t, J, 'red', alpha=1, lw=2, label='Cumulative incidence')
-ax.plot(d['Week'], df.incidence.to_numpy()/100000, label="Real data")
-ax.plot(d['Week'], peak_infections(0.5, df), label="Model with beta = 0.66, i0 = 10, gamma = 0.21")
+ax.plot(d['Week'], df.incidence.to_numpy(), label="Real data")
+ax.plot(d['Week'], peak_infections(0.66, df)*100000, label="Model with beta = 0.66, i0 = 10, gamma = 0.21")
 ax.set_xlabel('Time in days')
 ax.set_ylabel('Number')
 #ax.set_ylim(0,1.1)
