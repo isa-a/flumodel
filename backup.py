@@ -73,6 +73,7 @@ x0 = 0.5
 res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
 print(res)
 
+
 import matplotlib.pyplot as plt
 plt.plot(d['Week'], df.incidence.to_numpy()/100000, label="Real data")
 plt.plot(d['Week'], peak_infections(.66411585, df), label="Model with 0.72")

@@ -20,8 +20,8 @@ from scipy.optimize import leastsq
 
 #t = np.arange(0,84,7)
 t = np.linspace(0, 77, 77+1)
-d = {'Week': [t[0], t[7],t[14],t[21],t[28],t[35],t[42],t[49],t[56],t[63],t[70],t[77]], 
-     'incidence': [10, 206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,
+d = {'Week': [t[0],t[7],t[14],t[21],t[28],t[35],t[42],t[49],t[56],t[63],t[70],t[77]], 
+     'incidence': [10,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,
                    7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
 df = pd.DataFrame(data=d)
 #d = {'Week': t, 'incidence': [0,206.1705794,2813.420201,11827.9453,30497.58655,10757.66954,7071.878779,3046.752723,1314.222882,765.9763902,201.3800578,109.8982006]}
@@ -78,17 +78,25 @@ res = minimize(residual, x0, args=(df), method="Nelder-Mead", options={'fatol':1
 print(res)
 
 initial_infecteds = np.arange(1,31,1)
-#initial_beta = np.arange(0,1,1/30)
+initial_beta = np.arange(0,1,1/10)
 #initial_gamma = np.arange(1/10,1/6,1/30)
        
-def fit(i):
+def fit_infecteds(i):
     guesses = [0.5, i, 1/6] #beta, i0, gamma
     res = minimize(residual, guesses, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
     print(res, f'for a value of {i}')
 
 for i in initial_infecteds:
-    fit(i)
-        
+    fit_infecteds(i)
+
+def fit_beta(j):
+    guesses = [j, 10, 1/6] #beta, i0, gamma
+    res = minimize(residual, guesses, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
+    print(res, f'for a value of {j}')
+
+for j in initial_beta:
+    fit_beta(j)
+
 
 fig = plt.figure(facecolor='w')
 ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
