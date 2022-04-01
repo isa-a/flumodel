@@ -84,7 +84,7 @@ initial_beta = np.arange(0,1,1/10)
 def fit_infecteds(i):
     guesses = [0.5, i, 1/6] #beta, i0, gamma
     res = minimize(residual, guesses, args=(df), method="Nelder-Mead", options={'fatol':1e-04}).x
-    print(res, f'for a value of {i}')
+    print(res, f'for a value of I0={i}')
 
 for i in initial_infecteds:
     fit_infecteds(i)
