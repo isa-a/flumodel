@@ -24,7 +24,7 @@ def uniformdist(p): #uniform distribution
     
 def gaussian_mcmc(jump,mew,sigma):
     states = []
-    burn_in = int(jump*0.2)
+    burn_in = int(jump*0.2) #burnin allows to throwaway iterations at beginning
     current = random.uniform(-5*sigma+mew,5*sigma+mew)
     for i in range(jump):
         states.append(current)
@@ -33,7 +33,7 @@ def gaussian_mcmc(jump,mew,sigma):
         curr_prob = normaldist(x=current,mew=mew,sigma=sigma)
         move_prob = normaldist(x=movement,mew=mew,sigma=sigma)
         
-        acceptance = min(move_prob/curr_prob,1)
+        acceptance = min(move_prob/curr_prob,1)#acceptance rate. min will return whatever is smaller, rate or 1
         if uniformdist(acceptance):
             current = movement
     return states[burn_in:]
