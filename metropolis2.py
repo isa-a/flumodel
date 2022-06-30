@@ -16,7 +16,7 @@ population = mod1(30000)
 #Assume we are only able to observe 1,000 of these individuals.
 observation = population[np.random.randint(0, 30000, 1000)]
 
-fig = plt.figure()
+fig = plt.figure(figsize=(10,10))
 ax = fig.add_subplot(1,1,1)
 ax.hist( observation,bins=35 ,)
 ax.set_xlabel("Value")
@@ -83,4 +83,53 @@ def metropolis_hastings(likelihood_computer,prior, transition_model, param_init,
                 
     return np.array(accepted), np.array(rejected)
 
+
 accepted, rejected = metropolis_hastings(manual_log_like_normal,prior,transition_model,[mu_obs,0.1], 50000,observation,acceptance)
+accepted[8271]
+rejected[41727]
+
+
+fig = plt.figure(figsize=(10,10))
+ax = fig.add_subplot(2,1,1)
+
+ax.plot( rejected[0:50,1], 'rx', label='Rejected',alpha=0.5)
+ax.plot( accepted[0:50,1], 'b.', label='Accepted',alpha=0.5)
+ax.set_xlabel("Iteration")
+ax.set_ylabel("$\sigma$")
+ax.set_title("Figure 2: MCMC sampling for $\sigma$ with Metropolis-Hastings. First 50 samples are shown.")
+ax.grid()
+ax.legend()
+
+
+ax2 = fig.add_subplot(2,1,2)
+to_show=-accepted.shape[0]
+ax2.plot( rejected[to_show:,1], 'rx', label='Rejected',alpha=0.5)
+ax2.plot( accepted[to_show:,1], 'b.', label='Accepted',alpha=0.5)
+ax2.set_xlabel("Iteration")
+ax2.set_ylabel("$\sigma$")
+ax2.set_title("Figure 3: MCMC sampling for $\sigma$ with Metropolis-Hastings. All samples are shown.")
+ax2.grid()
+ax2.legend()
+
+
+
+fig.tight_layout()
+accepted.shape
+
+
+show=int(-0.75*accepted.shape[0])
+hist_show=int(-0.75*accepted.shape[0])
+
+mu=accepted[show:,0].mean()
+sigma=accepted[show:,1].mean()
+print(mu, sigma)
+model = lambda t,mu,sigma:np.random.normal(mu,sigma,t)
+observation_gen=model(population.shape[0],mu,sigma)
+fig = plt.figure(figsize=(10,10))
+ax = fig.add_subplot(1,1,1)
+ax.hist( observation_gen,bins=70 ,label="Predicted distribution of 30,000 individuals")
+ax.hist( population,bins=70 ,alpha=0.5, label="Original values of the 30,000 individuals")
+ax.set_xlabel("Mean")
+ax.set_ylabel("Frequency")
+ax.set_title("Figure 6: Posterior distribution of predicitons")
+ax.legend()
