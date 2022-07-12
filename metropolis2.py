@@ -85,15 +85,12 @@ def metropolis_hastings(likelihood_computer,prior, transition_model, param_init,
 
 
 accepted, rejected = metropolis_hastings(manual_log_like_normal,prior,transition_model,[mu_obs,0.1], 50000,observation,acceptance)
-accepted[8271]
-rejected[41727]
-
 
 fig = plt.figure(figsize=(10,10))
 ax = fig.add_subplot(2,1,1)
 
-ax.plot( rejected[0:50,1], 'rx', label='Rejected',alpha=0.5)
-ax.plot( accepted[0:50,1], 'b.', label='Accepted',alpha=0.5)
+ax.plot( rejected[0:500,1], 'rx', label='Rejected',alpha=0.5)
+ax.plot( accepted[0:500,1], 'b.', label='Accepted',alpha=0.5)
 ax.set_xlabel("Iteration")
 ax.set_ylabel("$\sigma$")
 ax.set_title("Figure 2: MCMC sampling for $\sigma$ with Metropolis-Hastings. First 50 samples are shown.")
