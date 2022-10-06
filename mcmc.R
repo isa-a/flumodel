@@ -14,7 +14,7 @@ sir <- function(time, state, parameters) { ## this is the ODE system
 }
 
 #initial vals and actual parameters
-init <- c(S = 1-1e-6, I = 1e-6, R = 0.0)
+init <- c(S = 100000-10, I = 10, R = 0.0)
 true.beta <- 0.53
 true.gamma <- 1/6
 parameters <- c(beta = true.beta, gamma = true.gamma)
@@ -101,3 +101,5 @@ abline(v = true.gamma, lwd = 2, lty = 2)
 
 hist(Samples.bnin[, 6], xlab = expression(sigma), main = "Posterior of likelihood standard deviation")
 abline(v = true.sigma, lwd = 2, lty = 2)
+
+
