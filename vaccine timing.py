@@ -21,17 +21,17 @@ import pandas as pd
 # Total population, N.
 N = 1000
 # Initial number of infected and recovered individuals, I0 and R0.
-I0, R0 = 0, 0
+I0, R0 = 10, 0
 # Everyone else, S0, is susceptible to infection initially.
 S0 = N - I0 - R0
 #first vaccinated, s1a
 S1a = 0.3*(S0)
 #second, s1b
-S1b = 0.4*(S1a)
+S1b = 1/(3*30)
 #s2a
 S2a = 0.1*(S1a)
 #s2b
-S2b = 0.2*(S1b)
+S2b = 1/(3*30)
 # Contact rate, beta, and mean recovery rate, gamma, (in 1/days).
 beta, gamma = 1/3, 1/7
 x1a, x1b, x2a, x2b = 0.1, 0.13, 0.15, 0.21
